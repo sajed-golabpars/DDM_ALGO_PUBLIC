@@ -131,7 +131,7 @@ def run_plastic_contact_model(dx_:float, dy_:float, shape_:tuple, pressure_:floa
     platic_points_sum = sum(1 for x in plastic_areas if x > 0)
     domain_points_total = nx*ny
     projected_area = contact_points_sum/domain_points_total
-    projected_area_plastic = contact_points_sum/domain_points_total
+    projected_area_plastic = platic_points_sum/domain_points_total
     print("Projected area - In contact Area:",projected_area)
     print("Projected area - Plastic Area:",projected_area_plastic)
 
@@ -200,7 +200,7 @@ if __name__ == "__main__":
     roughness_path:str = "./AN01_Höhe.csv"
     run_plastic_contact_model(dx_=1.112,
                               dy_=1.112,
-                              shape_= (1000,250),
+                              shape_= (1000,500),
                               pressure_= 100, #100Mpa
                               roughness_path_= roughness_path,
                               hardness_= 3500, #Maximum Pressure as MPa
