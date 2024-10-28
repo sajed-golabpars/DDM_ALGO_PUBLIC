@@ -1,0 +1,14 @@
+#Ignore the Virtual Environment and results
+venv/
+env/
+.env/
+.venv/
+results/
+DDM_TEST/
+CSV/
+CSV_NEW/
+# Ignore compiled Python files
+*.pyc
+# Ignore editor-specific files
+.vscode/
+.idea/

@@ -1,0 +1,31 @@
+1.  Calculation of P Kernel have affect the outputs     (To Test)
+2.  Calculation of HMax have affect the outputs         (To Test)
+3.  Fast Fourier is available in SciPy with two different approaches: 1. Signal Processing 2. Image Processing  (To Test)
+4.  Fourier Of Convolution is available in SciPy. Check if using the SciPy library for getting the fast foutier, is another approach to avoid making Wrapped around coefficients manually. (To Test)
+5.  Decimal Accuracy have affect on calculations speed (Information)
+6.  innerloop_convergance_upper_bound have affect on calculations speed (increase and decrease the iterations steps) (Information)
+7.  below criteria and a similar one for the Pij_old has to be checked as a convergence criteria for outer loop!!!!!!!!!!!
+    if(extensions.safe_float_comparison(a=self.parameters.Hij_old,b= self.preprocessor.Height_Matrix[i,j],decimal_accuracy=3)):
+        continue #this means the Hij_old has no change.
+    else:
+        self.preprocessor.Height_Matrix[i,j] = self.parameters.Hij_old
+8.  update_F_Kernel_IJexcluded() ---- It is important to send Fij as axi-symmetric or wrapped around (To Test -> Axi-Symmetric)
+9.  update_Pold_Kernel ---- It can be considered with different values based on the point of view. (To Test)
+        1. All Ps are the same and is as initial P 
+        2. The Ps of the P matrix 
+        3. Mixture of them
+*10.The Laplacian of Roughness, it must be calculated before padding or after Padding! right now, it is before padding. (To Test -> Laplacian After padding is now considered)
+11. Update rule for Height of near neighbor cells (Line 125 - self.parameters.update_height_kernel_3x3())
+12. What does it mean if Aij is equal to ZERO!? -> It raises failure and provide wrong answers 
+13. for P calculation using the nearNeighbors, we have different approaches:
+        1.  Unified initial Pressure
+        2.  Using the Current Ps from the P_Matrix for all steps
+        3,  Using the Current Ps in cached Matrix for each step
+
+
+
+
+
+
+++++!!! Why we only use one point of near neighbours contribution from the convolved data!?
+***!!! To increase performance, which data acquisitions can be moved to the outer loop!!!? e.g. 3x3 and 5x5 matrices!!

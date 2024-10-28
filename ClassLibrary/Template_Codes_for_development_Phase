@@ -1,0 +1,7 @@
+import traceback
+
+try:
+    pass
+except Exception as ex:
+    line_number = traceback.extract_tb(ex.__traceback__)[-1].lineno
+    raise Exception(f'file_name>class_name>function_name: Line No. {str(line_number)}, {str(ex)}')
