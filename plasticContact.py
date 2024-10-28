@@ -19,7 +19,7 @@ def get_force(pressure_nom:float, area_total_surface:float) -> float:
     return pressure_nom*area_total_surface
 #========================================================================
 
-def run_plastic_contact_model(dx_:float, dy_:float, pressure_:float, 
+def run_plastic_contact_model(dx_:float, dy_:float, shape_:tuple, pressure_:float, 
                               roughness_path_:str, hardness_:float, 
                               Es_:float=210000,penetration_:float = 0.000001,maximum_iteration_:int=10000, 
                               projected_area_:float= None, projected_tolerance:float= 0.04) -> tuple:
@@ -27,21 +27,20 @@ def run_plastic_contact_model(dx_:float, dy_:float, pressure_:float,
     
     dx=dx_
     dy= dy_
-    roughness = np.genfromtxt('./CSV_NEW/AN01_Höhe.csv',delimiter=',')
-    _min = np.min(roughness)
-    if(_min <0):
-        _min = abs(_min)
-    roughness += _min
-    #roughness = np.genfromtxt(roughness_path_,delimiter=',')
-    #roughness *= 0.001
-    plt.imshow(roughness)
-    plt.colorbar()
-    plt.show()
-    nx = 1500 #mesh size
-    ny = 1500 #mesh size
+    #roughness = np.genfromtxt('./CSV_NEW/AN01_Höhe.csv',delimiter=',')
+    roughness = np.genfromtxt(roughness_path_,delimiter=',')[:shape_[0],:shape_[1]]
+    #_min = np.min(roughness)
+    #if(_min <0):
+    #    _min = abs(_min)
+    #roughness += _min
+    #
+    roughness *= 0.001
+
+    nx:int = shape_[0] #mesh size
+    ny:int = shape_[1] #mesh size
     sx = nx*dx*1e-3 # mm physical length in direction x
     sy = ny*dy*1e-3 # mm
-"""
+
     print("physical length: (",sx,",",sy,")\n")
     #========================================================================
     domain_area = get_domain_area(dx=dx,dy=dy, shape=(nx,ny))
@@ -122,10 +121,20 @@ def run_plastic_contact_model(dx_:float, dy_:float, pressure_:float,
     #ContactMechanics.CommandLineInterface.HardWall.save_pressure()
 
 
+
     forces_sum = np.sum(forces[0])
-    print(forces_sum)
+    print("forces sum:",forces_sum)
     n = nx*ny
-    print(forces_sum/n) 
+    print("pressure nominal: ",forces_sum/domain_area) 
+
+    contact_points_sum = np.sum(forces > 0)
+    platic_points_sum = sum(1 for x in plastic_areas if x > 0)
+    domain_points_total = nx*ny
+    projected_area = contact_points_sum/domain_points_total
+    projected_area_plastic = contact_points_sum/domain_points_total
+    print("Projected area - In contact Area:",projected_area)
+    print("Projected area - Plastic Area:",projected_area_plastic)
+
 
     for i in range(len(external_forces)):
         
@@ -186,11 +195,12 @@ def run_plastic_contact_model(dx_:float, dy_:float, pressure_:float,
     ax.set_ylabel("contact area (mm^2)")
     fig.tight_layout()
 
-"""
+
 if __name__ == "__main__":
-    roughness_path:str = "./CSV_NEW/AN01_Höhe.csv"
-    run_plastic_contact_model(dx_=1.377,
-                              dy_=1.377,
+    roughness_path:str = "./AN01_Höhe.csv"
+    run_plastic_contact_model(dx_=1.112,
+                              dy_=1.112,
+                              shape_= (1000,250),
                               pressure_= 100, #100Mpa
                               roughness_path_= roughness_path,
                               hardness_= 3500, #Maximum Pressure as MPa
